@@ -44,8 +44,11 @@ $ cd fmu-automation-build
 Before launching buildbot you have to configure the variables in the [.env](docker/master/.env) file:
 
 * **BUILDBOT_WORKER_WORKDIR** : working directory of the worker. It will store all build files in that directory 
+* **BUILDBOT_CONFIG_URL** : URL of buildbot master config file. It may point to a .tar.gz file accessible from HTTP, but several git servers like github can generate that tarball automatically
+* **BUILDBOT_WEB_URL** : URL of buildbot web server. *Be carefull if you use localhost* because it may cause problems if you access it from the IP address of the server, in that case it is better to use its own ip address. You also have to fill the port in the URL. If you have a message *"Warning: c['buildbotURL'] is misconfigured to"* you didn't respect these indications.
+* **BUILDBOT_WEB_PORT** : Port of buildbot web server.
 * **SD_CARD_DEV_PATH** : path of SD card device to flash the image builded. :warning: :warning: BE REALLY CAREFULL WITH THIS PATH, CHOOSING A WRONG DEVICE PATH COULD ENTIRELY DAMAGE YOUR HOST MACHINE (E.G. ROOT PARTITION) :warning: :warning:
-* **FMU_CLOUD_HOSTNAME** : hostname of FMU cloud server. If you launched it on you local machine you can get it thanks to the `hostname`command.
+* **FMU_CLOUD_HOSTNAME** : Hostname of FMU cloud server. If you launched it on you local machine you can get it thanks to the `hostname` command.
 * **GITHUB_TOKEN** : GitHub API token to push build status to the repository.
 
 Once you have done it, you can launch buildbot:
@@ -83,12 +86,20 @@ In this file you can modify workers behavior, changes sources, schedulers, build
 
 There are some custom variables:
 
-* **REPO_URL**: URL of the repository to track for changes.
+* **REPOS_TO_TRACK**: Dict of URL of the repositories to track for changes. 
+    * `"build_branch"` means that a change in a branch of the repo will trigger the build for the supported machines for this branch. Be carefull it has to be a Yocto branch supported by FMU.
+    * `"build_all"` means that a change in the branch **"master"** of this repo will trigger the build of all machine/branch combinations.
 * **BRANCH_MACHINE_PAIRS**: Defines the branches of *REPO_URL* to track and the dependant machines.
 * **YOCTO_REPO_URL**: URL of the local server repository of FMU.
 
 ```python
-REPO_URL="https://github.com/lquinet/meta-fullmetalupdate-extra.git"
+# Custom variables
+REPOS_TO_TRACK = {
+    "https://github.com/lquinet/meta-fullmetalupdate-extra.git" : "build_branch",
+    "https://github.com/lquinet/meta-fullmetalupdate.git" : "build_branch",
+    "https://github.com/lquinet/fullmetalupdate.git" : "build_all",
+    "https://github.com/lquinet/fullmetalupdate-yocto-demo.git" : "build_all",
+}
 SUPPORTED_MACHINES_ROCKO=["imx6qdlsabresd", "raspberrypi3"]
 SUPPORTED_MACHINES_THUD=["imx8mqevk", "stm32mp1-disco"]
 SUPPORTED_MACHINES_WARRIOR=["imx8mqevk"]
@@ -102,9 +113,10 @@ YOCTO_REPO_URL="https://github.com/lquinet/fullmetalupdate-yocto-demo.git"
 
 ### docker-compose.yml and .env
 
-You can also change other parameters in this file such as BUILDBOT_WEB_PORT (port of web page), BUILDBOT_WORKER_PORT, etc.
-
 The [docker-compose.yml](docker/master/docker-compose.yml) file depends on the [.env](docker/master/.env) file.
+
+You can directly change the parameters of buildbot containers by modifying [docker-compose.yml](docker/master/docker-compose.yml).
+
 
 ## Improvements
 
