@@ -9,7 +9,7 @@ services:
       - BUILDBOT_CONFIG_URL=$BUILDBOT_CONFIG_URL
       - BUILDBOT_WORKER_PORT=9989
       - BUILDBOT_WEB_URL=$BUILDBOT_WEB_URL
-      - BUILDBOT_WEB_PORT=$BUILDBOT_WEB_PORT
+      - BUILDBOT_WEB_PORT=tcp:port=$BUILDBOT_WEB_PORT
       - BUILDBOT_WORKER_WORKDIR=$BUILDBOT_WORKER_WORKDIR
       - SMTP_PWD=$SMTP_PWD
       - GITHUB_TOKEN=$GITHUB_TOKEN
@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8010:8010"
+      - "$BUILDBOT_WEB_PORT:$BUILDBOT_WEB_PORT"
   db:
     env_file:
       - db.env
