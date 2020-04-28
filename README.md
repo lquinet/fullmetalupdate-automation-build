@@ -66,7 +66,7 @@ $ docker-compose up
 ```
 You should now be able to go to http://localhost:8010, where you will see a web page similar to:
 
-![Image not found](images/index.png)
+![index](images/index.png)
 
 ### GitHub integration
 
@@ -75,13 +75,13 @@ https://github.com/settings/tokens and click on "Generate new token". Be sure to
 
 Once you have provided it, you should see build status appearing on your commits like that:
 
-![Image not found](images/GitHub-build-status.png)
+![GitHub-build-status](images/GitHub-build-status.png)
 
 ### CI/CD badge
 
 The CI badge of all builders are available at http://\<buildbotURL\>/badges/\<buildername\>.svg.
 
-![Image not found](images/CI-badge.png)
+![CI-badge](images/CI-badge.png)
 
 
 ### Slack integration
@@ -93,6 +93,10 @@ This is performed thanks to the incoming webhook feature of slack apps. All you 
 To get a webhook you cal follow this tutorial: https://api.slack.com/tutorials/slack-apps-hello-world.
 
 The slack integration in buildbot has been done thanks to the non official buildbot plugin [buildbot-slack](https://github.com/rockwelln/buildbot-slack).
+
+Here is a preview of the slack integration:
+
+![slack-integration](images/slack-integration.png)
 
 ### Mail notification
 
