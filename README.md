@@ -49,7 +49,14 @@ Before launching buildbot you have to configure the variables in the [.env](dock
 * **BUILDBOT_WEB_PORT** : Port of buildbot web server.
 * **SD_CARD_DEV_PATH** : path of SD card device to flash the image builded. :warning: :warning: BE REALLY CAREFULL WITH THIS PATH, CHOOSING A WRONG DEVICE PATH COULD ENTIRELY DAMAGE YOUR HOST MACHINE (E.G. ROOT PARTITION) :warning: :warning:
 * **FMU_CLOUD_HOSTNAME** : Hostname of FMU cloud server. If you launched it on you local machine you can get it thanks to the `hostname` command.
+* **MAIL_FROM_ADDR** : Mail address from which to send mail
+* **SMTP_USER** : Mail address of smtp mail account
+* **SMTP_PWD** : Password of smtp mail account
+* **SMTP_SERVER_HOSTNAME** : SMTP server hostname
+* **SMTP_PORT** : SMTP Port
+* **SMTP_ENCRYPTION** : SMTP Encryption: NONE or STARTTLS or SSL/TLS
 * **GITHUB_TOKEN** : GitHub API token to push build status to the repository.
+* **SLACK_WEBHOOK_URL** : Slack webhook url (see https://api.slack.com/tutorials/slack-apps-hello-world)
 
 Once you have done it, you can launch buildbot:
 
@@ -75,6 +82,32 @@ Once you have provided it, you should see build status appearing on your commits
 The CI badge of all builders are available at http://\<buildbotURL\>/badges/\<buildername\>.svg.
 
 ![Image not found](images/CI-badge.png)
+
+
+### Slack integration
+
+You can sends messages to a Slack channel when each build starts / finishes with a handy link to the build results.
+
+This is performed thanks to the incoming webhook feature of slack apps. All you have to do is to provide a webhook url by setting the SLACK_WEBHOOK_URL variable in the [.env](docker/master/.env) file.
+
+To get a webhook you cal follow this tutorial: https://api.slack.com/tutorials/slack-apps-hello-world.
+
+The slack integration in buildbot has been done thanks to the non official buildbot plugin [buildbot-slack](https://github.com/rockwelln/buildbot-slack).
+
+### Mail notification
+
+You can send email when builds finish. The way it has been configured in buildbot is to send a mail to developers who made the change in the repo which triggered the build in buildbot.
+
+This has only been tested with office 365 addresses but more configurations are supported.
+
+In order to make it works you have to configure several variables in the [.env](docker/master/.env) file. You have to provide a mail address from which all mails are sent (MAIL_FROM_ADDR). You also have to indicate the parameters related with the stmp server:
+* Connection security : SMTP_ENCRYPTION (NONE or STARTTLS or SSL/TLS)
+* Stmp port : SMTP_PORT (default is 25)
+* Server hostname : SMTP_SERVER_HOSTNAME (default is localhost)
+* User name for authentification on the server : SMTP_USER (don't set the variable if your SMTP host doesn't require authentication)
+* Password for authentification on the server : SMTP_PWD (don't set the variable if your SMTP host doesn't require authentication)
+
+Typical config for office 365 mail is SMTP_ENCRYPTION=STARTTLS ; SMTP_PORT=587 and requires SMTP_USER and SMTP_PWD which are login and password of the mail account related to MAIL_FROM_ADDR.
 
 ## Customisation
 
