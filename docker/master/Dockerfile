@@ -1,13 +1,13 @@
 # based on alpine:3.7
 FROM buildbot/buildbot-master:master
 
-# install dev dependencies
+# install dev dependencies for pillow and pyopenssl
 RUN apk add build-base python3-dev libffi-dev
 
-# install pillow dependencies
+# install pillow dependencies (required for buildbot-badges)
 RUN apk add jpeg-dev zlib-dev cairo cairo-dev 
 
-# install openssl dependencies
+# install openssl dependencies (required for pyopenssl)
 RUN apk add openssl-dev 
 
 # reinstall pyopenssl (to solve TLS problems with mail notifier)
