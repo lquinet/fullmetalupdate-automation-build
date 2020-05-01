@@ -25,8 +25,15 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh \
 RUN groupadd docker \
     ; usermod -aG docker buildbot
 
+# Dependencies for farm-core
+RUN apt-get -yqq install locales telnet 
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 # Switch to root to have all permissions (need to use dd command, etc.)
 USER root
 WORKDIR /buildbot
 
-CMD ["/usr/bin/dumb-init", "twistd", "--pidfile=", "-ny", "buildbot.tac"]
+# Set-up the entry point of the container
+COPY ./docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
