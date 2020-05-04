@@ -7,7 +7,7 @@ if [ -z "$BITBUCKET_USERNAME" ] || [ -z "$BITBUCKET_PASSWORD" ]; then
 		exit 1
 fi
 
-git clone https://$BITBUCKET_USERNAME:$BITBUCKET_PASSWORD@bitbucket.org/adeneo-embedded/farm-core.git
+git clone -b WUKF-223-support-new-version-pyftdi https://$BITBUCKET_USERNAME:$BITBUCKET_PASSWORD@bitbucket.org/adeneo-embedded/farm-core.git
 
 cd farm-core/ && ./install.sh
 
