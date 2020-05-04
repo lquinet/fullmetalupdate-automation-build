@@ -1,5 +1,5 @@
 #!/bin/python3
-
+import os
 from farmcore import SDWire, APCPDU
 
 # power off board

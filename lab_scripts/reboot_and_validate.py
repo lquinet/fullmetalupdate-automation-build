@@ -1,5 +1,5 @@
 #!/bin/python3
-
+import os
 from farmcore import Hub, Board, SerialConsole, SDWire, APCPDU
 
 SDWire().to_board()
