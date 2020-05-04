@@ -15,7 +15,10 @@ board = Board(
          port=hub.get_serial('devnode'),
          baud=115200
      ),
-     power=APCPDU('10.103.3.41', 'apc', 'apc', 2),
+     power=APCPDU(os.environ.get("APCPDU_IP_ADD", None), 
+          os.environ.get("APCPDU_USERNAME", "apc"),  
+          os.environ.get("APCPDU_PASSWORD", "apc"), 
+          int(os.environ.get("APCPDU_PORT", 1))),
      bootstr='login:',
      boot_max_s=30
 )
